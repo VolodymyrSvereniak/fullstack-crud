@@ -26,6 +26,30 @@ export default function TableList({
     );
   });
 
+  const updateStatus = async (id: number | undefined, is_active: boolean) => {
+    try {
+      const response = await axios.patch<Client>(
+        `http://localhost:3000/api/clients/${id}`,
+        {
+          is_active: !is_active,
+        }
+      );
+      setTableData((prev) =>
+        prev.map((client) =>
+          client.id === id
+            ? { ...client, is_active: response.data.is_active }
+            : client
+        )
+      );
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.message);
+      } else {
+        setError(String(err));
+      }
+    }
+  };
+
   const handleDelete = async (id: number | undefined): Promise<void> => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this client?"
@@ -70,13 +94,16 @@ export default function TableList({
                 <td>{client.rate}</td>
                 <td>
                   <button
+                    onClick={() =>
+                      void updateStatus(client.id, client.is_active)
+                    }
                     className={`btn rounded-full w-20 ${
-                      client.isActive
+                      client.is_active
                         ? `btn-primary`
                         : `btn-outline btn-primary`
                     }`}
                   >
-                    {client.isActive ? "Active" : "Inactive"}
+                    {client.is_active ? "Active" : "Inactive"}
                   </button>
                 </td>
                 <td>

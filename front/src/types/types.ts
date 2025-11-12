@@ -4,5 +4,7 @@ export interface Client {
   email: string;
   job: string;
   rate: number | string;
-  isActive: boolean;
+  is_active: boolean;
 }
+
+export type Mode = "add" | "edit";

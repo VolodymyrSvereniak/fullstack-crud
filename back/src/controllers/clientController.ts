@@ -44,6 +44,26 @@ export const updateClient = async (
   }
 };
 
+export const updateClientStatus = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { is_active } = req.body;
+    const updatedClient = await clientService.updateClientStatus(id, is_active)
+
+    if (!updatedClient) {
+      res.status(404).json({ message: "Client not found"});
+    }
+    
+    res.status(200).json(updatedClient);
+  } catch (error) {
+    console.error("Error updating client status", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export const deleteClient = async (
   req: Request,
   res: Response

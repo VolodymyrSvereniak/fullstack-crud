@@ -1,15 +1,5 @@
 import { useState, useEffect } from "react";
-
-interface Client {
-  id?: number;
-  name: string;
-  email: string;
-  job: string;
-  rate: number | string;
-  isActive: boolean;
-}
-
-type Mode = "edit" | "add";
+import type { Client, Mode } from "../types/types";
 
 interface ModalFormProps {
   isOpen: boolean;
@@ -26,17 +16,21 @@ export default function ModalForm({
   OnSubmit,
   clientData,
 }: ModalFormProps) {
-  const [rate, setRate] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [job, setJob] = useState<string>("");
+  const [rate, setRate] = useState<string>("");
   const [status, setStatus] = useState<boolean>(false);
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleStatusChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
     setStatus(e.target.value === "Active");
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     try {
       const payload: Omit<Client, "id"> = {
@@ -44,7 +38,7 @@ export default function ModalForm({
         email,
         job,
         rate: Number(rate),
-        isActive: status,
+        is_active: status,
       };
       await OnSubmit(payload);
       onClose();
@@ -59,7 +53,7 @@ export default function ModalForm({
       setEmail(clientData.email);
       setJob(clientData.job);
       setRate(clientData.rate?.toString() ?? "");
-      setStatus(Boolean(clientData.isActive));
+      setStatus(clientData.is_active);
     } else {
       setName("");
       setEmail("");
@@ -83,7 +77,9 @@ export default function ModalForm({
                 type="text"
                 className="grow"
                 value={name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setName(e.target.value)
+                }
               />
             </label>
             <label className="input input-bordered my-4 flex items-center gap-2">
@@ -92,7 +88,9 @@ export default function ModalForm({
                 type="text"
                 className="grow"
                 value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEmail(e.target.value)
+                }
               />
             </label>
             <label className="input input-bordered my-4 flex items-center gap-2">
@@ -101,7 +99,9 @@ export default function ModalForm({
                 type="text"
                 className="grow"
                 value={job}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setJob(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setJob(e.target.value)
+                }
               />
             </label>
 
@@ -112,16 +112,17 @@ export default function ModalForm({
                   type="number"
                   className="grow"
                   value={rate}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRate(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setRate(e.target.value)
+                  }
                 />
               </label>
               <select
-                value={status ? "Active" : "Inactive"}
                 className="select select-bordered w-full max-w-xs"
                 onChange={handleStatusChange}
               >
-                <option>Inactive</option>
-                <option>Active</option>
+                <option value={"Inactive"}>Inactive</option>
+                <option value={"Active"}>Active</option>
               </select>
             </div>
 

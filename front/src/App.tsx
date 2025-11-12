@@ -4,9 +4,7 @@ import NavBar from "./components/Navbar";
 import ModalForm from "./components/ModalForm";
 import TableList from "./components/TableList";
 import axios from "axios";
-import type { Client } from "./types/types";
-
-type Mode = "add" | "edit";
+import type { Client, Mode } from "./types/types";
 
 function App() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
